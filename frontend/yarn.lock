@@ -900,6 +900,16 @@ minimist@^1.2.6:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.8.tgz#c1a464e7693302e082a075cee0c057741ac4772c"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
 
+mjpeg-consumer@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/mjpeg-consumer/-/mjpeg-consumer-2.0.0.tgz#655c242b5bdcdcb7978c785eaf22e3388e092a8f"
+  integrity sha512-nyVOIMOQ7JEXwFPUkcbDgekBJGXSK/53nqhPnKZen3a4CAOM4HxqzPZQxDo/8NPhoueuXlvKN3DeDLV2OSi1fw==
+
+mjpeg-decoder@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/mjpeg-decoder/-/mjpeg-decoder-1.0.3.tgz#d32da33a1c444abad11f44080c728a7b5c789d68"
+  integrity sha512-X1sPolDgGmFePL1xGBpsRnUEZIc4yDQcCjdzkESoiysPOGchYP1BzLzzY+V5JTIe3RJ6tOzRmQ+HbPEbeu3nag==
+
 ms@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
@@ -1045,6 +1055,11 @@ react-router@6.9.0:
   integrity sha512-51lKevGNUHrt6kLuX3e/ihrXoXCa9ixY/nVWRLlob4r/l0f45x3SzBvYJe3ctleLUQQ5fVa4RGgJOTH7D9Umhw==
   dependencies:
     "@remix-run/router" "1.4.0"
+
+react-webcam@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/react-webcam/-/react-webcam-7.0.1.tgz#8249e1d621eb4bba7e3f52135f562439d0528df3"
+  integrity sha512-8E/Eb/7ksKwn5QdLn67tOR7+TdP9BZdu6E5/DSt20v8yfW/s0VGBigE6VA7R4278mBuBUowovAB3DkCfVmSPvA==
 
 react@^18.2.0:
   version "18.2.0"
