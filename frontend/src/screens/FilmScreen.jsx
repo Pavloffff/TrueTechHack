@@ -1,10 +1,10 @@
-import FilmStream from '../components/FilmStream'
+import VideoPlayer from '../components/VideoPlayer'
 import styles from '../styles/FilmScreen.module.scss'
 
 const FilmScreen = () => {
 	return (
 		<div className={styles.content}>
-			<FilmStream />
+			<VideoPlayer url='http://localhost:8080/bgr' />
 		</div>
 	)
 }

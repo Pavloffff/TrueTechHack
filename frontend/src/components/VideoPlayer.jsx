@@ -1,7 +1,7 @@
-const FilmStream = () => {
+const VideoPlayer = ({ url }) => {
 	return (
 		<iframe
-			src={'http://localhost:8080/bgr'}
+			src={url}
 			allow='accelerometer, autoplay; encrypted-media; gyroscope; picture-in-picture'
 			allowFullScreen
 			width='1920'
@@ -10,4 +10,4 @@ const FilmStream = () => {
 	)
 }
 
-export default FilmStream
+export default VideoPlayer
