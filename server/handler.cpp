@@ -5,17 +5,16 @@
 using MJPEGStreamer = nadjieb::MJPEGStreamer;
 
 std::queue<nlohmann::json> commands;
+int callback = 1;
 
 void film(std::string filmName, int port)
 {
-    std::cout << filmName << " " << port << "\n";
     cv::VideoCapture cap(filmName);
     std::vector<int> params = {cv::IMWRITE_JPEG_QUALITY, 90};
     MJPEGStreamer streamer;
     nlohmann::json command;
     command["type"] = "empty";
-    bool flag = true;
-    while (flag) {
+    while (callback) {
         if (!commands.empty()) {
             command = commands.front();
             commands.pop();
@@ -26,20 +25,44 @@ void film(std::string filmName, int port)
                 if (!commands.empty()) {
                     command = commands.front();
                     commands.pop();
-                }       
-                cv::Mat frame, filtred;
+                }
+                int brightness, contrast;
+                int brightFlag = 0, contrFlag = 0, saturFlag = 0;
+                cv::Mat frame, brightenedImage, contrastedImage, res;
                 cap >> frame;
                 if (frame.empty()) {
-                    std::cerr << "frame not grabbed\n";
-                    exit(EXIT_FAILURE);
+                    std::cout << port << ": end of video\n";
+                    streamer.stop();
+                    callback = 0;
+                    break;
                 }
                 if (command["type"] == "filter") {
-                    cv::cvtColor(frame, filtred, cv::COLOR_BGR2HSV);
-                } else {
-                    filtred = frame;    
+                    if (command["filterType"] == "brightness") {
+                        brightness = command["value"];
+                        brightFlag = 1;
+                    } else if (command["filterType"] == "contrast") {
+                        contrast = command["value"];
+                        contrFlag = 1;
+                    }
+                } 
+                if (brightFlag) {
+                    frame.convertTo(brightenedImage, -1, 1, brightness);
+                    res = brightenedImage;
+                }
+                if (contrFlag) {
+                    if (brightFlag) {
+                        res.convertTo(contrastedImage, -1, contrast, 0);
+                        res = contrastedImage;
+                    } else {
+                        frame.convertTo(contrastedImage, -1, contrast, 0);
+                        res = contrastedImage;
+                    }
+                }
+                if (!contrFlag && !brightFlag) {
+                    res = frame;
                 }
                 std::vector<uchar> buff;
-                cv::imencode(".jpg", filtred, buff, params);
+                cv::imencode(".jpg", res, buff, params);
                 streamer.publish("/video", std::string(buff.begin(), buff.end()));
 
                 std::this_thread::sleep_for(std::chrono::milliseconds(20));
@@ -59,7 +82,7 @@ int main(int argc, char const *argv[])
     int serverPort = port + 1;
     std::string filmName = argv[2];
     int flag = 1;
-    while (flag) {
+    while (flag && callback) {
         nlohmann::json reply = Recv(socket);
         reply["ans"] = "error";
         nlohmann::json request = reply;
@@ -75,6 +98,10 @@ int main(int argc, char const *argv[])
             commands.push(reply);
         }
         Send(request, socket);
+    }
+    if (!callback) {
+        filmThread.detach();
+        destroySock(context, socket);
     }
     return 0;
 }
