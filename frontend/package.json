@@ -12,12 +12,9 @@
     "@tanstack/react-query": "^4.28.0",
     "@tanstack/react-query-devtools": "^4.28.0",
     "axios": "^1.3.4",
-    "mjpeg-consumer": "^2.0.0",
-    "mjpeg-decoder": "^1.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.9.0",
-    "react-webcam": "^7.0.1",
     "sass": "^1.60.0"
   },
   "devDependencies": {
