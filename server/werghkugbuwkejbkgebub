@@ -1,6 +1,0 @@
-{
-    "id": int,
-    "command": string,
-    "type": string,
-    "value": int
-}
