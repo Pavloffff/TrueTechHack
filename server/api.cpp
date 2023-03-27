@@ -77,7 +77,18 @@ int main(int argc, char const *argv[])
             destroySock(sockets[id].first, sockets[id].second);
             sockets.erase(id);
             std::cout << "Ok" << std::endl;
-        }
+        } else if (command == "shift") {
+            int id;
+            std::string vct;
+            std::cin >> id >> vct;
+            request["type"] = "shift";
+            request["id"] = id;
+            request["vct"] = vct;
+            nlohmann::json reply = sendAndRecv(request, sockets[id].second, 0);
+            if (reply["ans"] == "ok") {
+                std::cout << "Ok" << std::endl;
+            }
+        } 
     }
     return 0;
 }

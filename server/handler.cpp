@@ -11,6 +11,20 @@ int callback = -1;
 void film(std::string filmName, int port)
 {
     cv::VideoCapture cap(filmName);
+
+    int fps = cap.get(cv::CAP_PROP_FPS);
+    int shift = 5;
+
+    int colorThreshold = 50;
+    int brightnessThreshold = 50;
+    int darkFramesCount = 100;
+    int darkFramesCounter = 0;
+
+    cv::Mat frame0, hsv0;
+    cv::Scalar meanHsv;
+    std::vector<cv::Mat> hsvChannels;
+    double lastBrightness = cv::mean(hsv0(cv::Rect(0, 0, hsv0.cols, hsv0.rows)), cv::Mat())[2];
+
     std::vector<int> params = {cv::IMWRITE_JPEG_QUALITY, 90};
     MJPEGStreamer streamer;
     nlohmann::json command;
@@ -38,13 +52,22 @@ void film(std::string filmName, int port)
                     }
                 }
                 double brightness, contrast, saturate;
-                int brightFlag = 0, contrFlag = 0, saturFlag = 0, filterflag = 0, monoFlag = 0, blueFlag = 0;
+                int brightFlag = 0, contrFlag = 0, saturFlag = 0, filterflag = 0, monoFlag = 0, blueFlag = 0, epilepsyFlag = 0;
                 cap >> frame;
                 if (frame.empty() || command["type"] == "remove") {
                     std::cout << port << ": end of video\n";
                     streamer.stop();
                     callback = 0;
                     break;
+                }
+                int curFrame = cap.get(cv::CAP_PROP_POS_FRAMES);
+                if (command["type"] == "shift") {
+                    if (command["vct"] == "right") {
+                        cap.set(cv::CAP_PROP_POS_FRAMES, curFrame + fps * shift);
+                    } else {
+                        cap.set(cv::CAP_PROP_POS_FRAMES, curFrame - fps * shift);
+                    }
+                    command["type"] = "empty";
                 }
                 if (command["type"] == "filter") {
                     if (command["filterType"] == "brightness") {
@@ -60,8 +83,10 @@ void film(std::string filmName, int port)
                         monoFlag = 1;
                     } else if (command["filterType"] == "blue") {
                         blueFlag = 1;
+                    } else if (command["filterType"] == "epilepsy") {
+                        epilepsyFlag = 1;
                     }
-                } 
+                }
                 if (brightFlag) {
                     frame.convertTo(brightenedImage, -1, 1, brightness);
                     res = brightenedImage;
@@ -110,13 +135,34 @@ void film(std::string filmName, int port)
                     channels[0] = channels[0] * 0.5;
                     cv::merge(channels, res);
                 }
-                if (!contrFlag && !brightFlag && !saturFlag && !monoFlag && !blueFlag) {
+                if (epilepsyFlag) {
+                    if (brightFlag || contrFlag || monoFlag || blueFlag) {
+                        cv::cvtColor(res, hsv0, cv::COLOR_BGR2HSV);
+                    } else {
+                        cv::cvtColor(frame, hsv0, cv::COLOR_BGR2HSV);
+                    }
+                    cv::split(hsv0, hsvChannels);
+                    cv::Scalar meanHSV = cv::mean(hsvChannels[2]);
+                    double brightVal = meanHSV.val[0];
+                    double colorChange = cv::mean(cv::abs(hsvChannels[0](cv::Rect(0, 1, hsvChannels[0].cols, hsvChannels[0].rows-1)) - hsvChannels[0](cv::Rect(0, 0, hsvChannels[0].cols, hsvChannels[0].rows-1)))).val[0];
+                    if (colorChange > colorThreshold || std::abs(brightVal - lastBrightness) > brightnessThreshold) {
+                        std::cout << "Этот кадр может содержать эпилептическую сцену!" << std::endl;
+                        darkFramesCounter = darkFramesCount;
+                    }
+                    if (darkFramesCounter > 0) {
+                        res = cv::Mat::zeros(frame.size(), frame.type());
+                        darkFramesCounter--;
+                    } else if (!contrFlag && !brightFlag && !saturFlag && !monoFlag && !blueFlag) {
+                        res = frame;
+                    }
+                    lastBrightness = brightVal;
+                }
+                if (!contrFlag && !brightFlag && !saturFlag && !monoFlag && !blueFlag && !epilepsyFlag) {
                     res = frame;
                 }
                 std::vector<uchar> buff;
                 cv::imencode(".jpg", res, buff, params);
                 streamer.publish("/video", std::string(buff.begin(), buff.end()));
-
                 std::this_thread::sleep_for(std::chrono::milliseconds(20));
             }
         }
@@ -150,7 +196,7 @@ int main(int argc, char const *argv[])
             request["ans"] = "ok";
             filmThread = std::thread(film, argv[2], serverPort);
             commands.push(reply);
-        } else if (reply["type"] == "filter" || reply["type"] == "pause" || reply["type"] == "resume") {
+        } else if (reply["type"] == "filter" || reply["type"] == "pause" || reply["type"] == "resume" || reply["type"] == "shift") {
             request["ans"] = "ok";
             commands.push(reply);
         } else if (reply["type"] == "remove") {

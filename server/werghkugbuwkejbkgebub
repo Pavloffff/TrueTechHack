@@ -1,3 +1,6 @@
-resume 5
-resume 6
-filter 5 monochromatic 0
+{
+    "id": int,
+    "command": string,
+    "type": string,
+    "value": int
+}
