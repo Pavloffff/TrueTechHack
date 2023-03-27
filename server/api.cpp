@@ -49,6 +49,24 @@ int main(int argc, char const *argv[])
             if (reply["ans"] == "ok") {
                 std::cout << "Ok" << std::endl;
             }
+        } else if (command == "pause") {
+            int id;
+            std::cin >> id;
+            request["type"] = "pause";
+            request["id"] = id;
+            nlohmann::json reply = sendAndRecv(request, sockets[id].second, 0);
+            if (reply["ans"] == "ok") {
+                std::cout << "Ok" << std::endl;
+            }
+        } else if (command == "resume") {
+            int id;
+            std::cin >> id;
+            request["type"] = "resume";
+            request["id"] = id;
+            nlohmann::json reply = sendAndRecv(request, sockets[id].second, 0);
+            if (reply["ans"] == "ok") {
+                std::cout << "Ok" << std::endl;
+            }
         }
     }
     return 0;

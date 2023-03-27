@@ -26,9 +26,18 @@ void film(std::string filmName, int port)
                     command = commands.front();
                     commands.pop();
                 }
-                double brightness, contrast, saturate;
-                int brightFlag = 0, contrFlag = 0, saturFlag = 0, filterflag = 0, monoFlag = 0;
                 cv::Mat frame, brightenedImage, contrastedImage, saturatedImage, monochromaticImage, res;
+                if (command["type"] == "pause") {
+                    while (command["type"] != "resume") {
+                        if (!commands.empty()) {
+                            command = commands.front();
+                            commands.pop();
+                        }
+                        continue;
+                    }
+                }
+                double brightness, contrast, saturate;
+                int brightFlag = 0, contrFlag = 0, saturFlag = 0, filterflag = 0, monoFlag = 0, blueFlag = 0;
                 cap >> frame;
                 if (frame.empty()) {
                     std::cout << port << ": end of video\n";
@@ -48,6 +57,8 @@ void film(std::string filmName, int port)
                         saturFlag = 1;
                     } else if (command["filterType"] == "monochromatic") {
                         monoFlag = 1;
+                    } else if (command["filterType"] == "blue") {
+                        blueFlag = 1;
                     }
                 } 
                 if (brightFlag) {
@@ -88,7 +99,17 @@ void film(std::string filmName, int port)
                     });
                     cv::cvtColor(monochromaticImage, res, cv::COLOR_HSV2BGR);
                 }
-                if (!contrFlag && !brightFlag && !saturFlag && !monoFlag) {
+                if (blueFlag) {
+                    std::vector<cv::Mat> channels;
+                    if (brightFlag || contrFlag || monoFlag) {
+                        cv::split(res, channels);
+                    } else {
+                        cv::split(frame, channels);
+                    }
+                    channels[0] = channels[0] * 0.5;
+                    cv::merge(channels, res);
+                }
+                if (!contrFlag && !brightFlag && !saturFlag && !monoFlag && !blueFlag) {
                     res = frame;
                 }
                 std::vector<uchar> buff;
@@ -126,7 +147,7 @@ int main(int argc, char const *argv[])
             request["ans"] = "ok";
             filmThread = std::thread(film, argv[2], serverPort);
             commands.push(reply);
-        } else if (reply["type"] == "filter") {
+        } else if (reply["type"] == "filter" || reply["type"] == "pause" || reply["type"] == "resume") {
             request["ans"] = "ok";
             commands.push(reply);
         }
