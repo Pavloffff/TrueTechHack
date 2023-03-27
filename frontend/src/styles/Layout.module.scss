@@ -1,7 +1,11 @@
 .nav {
-	@apply bg-slate-400 h-12 p-3;
+	@apply bg-slate-400 h-12 p-3 flex justify-between items-center;
+
+	.links {
+		@apply flex justify-between;
+	}
 
 	.link {
-		@apply bg-white rounded-lg p-2;
+		@apply bg-white rounded-lg p-2 mr-2 flex justify-center items-center;
 	}
 }

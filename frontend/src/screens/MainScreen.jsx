@@ -1,14 +1,21 @@
+import { useContext } from 'react'
 import LinkToFilm from '../components/LinkToFilm'
+import { Context } from '../context/context'
 import styles from '../styles/MainScreen.module.scss'
 
 const MainScreen = () => {
+	const { isLogin } = useContext(Context)
+
+	console.log(localStorage.getItem('login'))
+
 	return (
-		<main className={styles.main}>
-			<LinkToFilm info='film1' id='1' />
-			<LinkToFilm info='film2' id='2' />
-			<LinkToFilm info='film3' id='3' />
-			<LinkToFilm info='film4' id='4' />
-		</main>
+		<>
+			{isLogin && (
+				<main className={styles.main}>
+					<LinkToFilm info='film1' id='1' />
+				</main>
+			)}
+		</>
 	)
 }
 

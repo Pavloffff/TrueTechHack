@@ -1,0 +1,18 @@
+.screen {
+	@apply flex justify-center items-center h-screen;
+
+	.form {
+		@apply flex flex-col border-2 border-black p-3;
+
+		h1 {
+			@apply text-center;
+		}
+
+		.input {
+			@apply border-2 mb-1;
+		}
+		.submit {
+			@apply border-2 bg-slate-300;
+		}
+	}
+}

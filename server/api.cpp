@@ -3,6 +3,11 @@
 
 std::map<int, std::pair<zmq::context_t, zmq::socket_t>> sockets;
 
+std::map<std::string, int> logins;
+int curId = 5;
+
+// http://127.0.0.1:4999/create
+
 int main(int argc, char const *argv[])
 {
     crow::SimpleApp app;
@@ -12,7 +17,10 @@ int main(int argc, char const *argv[])
         if (!data) {
             return crow::response(400);
         }
-        int id = data["id"].i();
+        std::string login = data["login"].s();
+        logins[login] = curId;
+        curId++;
+        int id = logins[login];
         std::string filmName = data["filmName"].s();
         int port = MINPORT + id * 2;
         zmq::context_t context;
@@ -41,7 +49,8 @@ int main(int argc, char const *argv[])
         if (!data) {
             return crow::response(400);
         }
-        int id = data["id"].i();
+        std::string login = data["login"].s();
+        int id = logins[login];
         nlohmann::json request;
         request["type"] = "start";
         nlohmann::json reply = sendAndRecv(request, sockets[id].second, 0);
@@ -56,7 +65,8 @@ int main(int argc, char const *argv[])
         if (!data) {
             return crow::response(400);
         }
-        int id = data["id"].i();
+        std::string login = data["login"].s();
+        int id = logins[login];
         double value = data["value"].d();
         std::string filterType = data["filterType"].s();
         nlohmann::json request;
@@ -76,8 +86,8 @@ int main(int argc, char const *argv[])
         if (!data) {
             return crow::response(400);
         }
-        int id = data["id"].i();
-
+        std::string login = data["login"].s();
+        int id = logins[login];
         nlohmann::json request;
         request["type"] = "pause";
         request["id"] = id;
@@ -93,7 +103,8 @@ int main(int argc, char const *argv[])
         if (!data) {
             return crow::response(400);
         }
-        int id = data["id"].i();
+        std::string login = data["login"].s();
+        int id = logins[login];
 
         nlohmann::json request;
         request["type"] = "resume";
@@ -110,7 +121,8 @@ int main(int argc, char const *argv[])
         if (!data) {
             return crow::response(400);
         }
-        int id = data["id"].i();
+        std::string login = data["login"].s();
+        int id = logins[login];
 
         nlohmann::json request;
         request["type"] = "remove";
@@ -126,7 +138,8 @@ int main(int argc, char const *argv[])
         if (!data) {
             return crow::response(400);
         }
-        int id = data["id"].i();
+        std::string login = data["login"].s();
+        int id = logins[login];
         std::string vct = data["vct"].s();
 
         nlohmann::json request;
@@ -140,6 +153,6 @@ int main(int argc, char const *argv[])
         }
     });
 
-    app.port(8001).run();
+    app.port(MINPORT - 1).run();
     return 0;
 }
