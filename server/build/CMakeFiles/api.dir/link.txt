@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/api.dir/api.cpp.o -o api  -lzmq 

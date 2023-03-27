@@ -1,0 +1,4 @@
+/home/ggame/developing/TrueTechHack/t1/TrueTechHack/server/build/CMakeFiles/api.dir
+/home/ggame/developing/TrueTechHack/t1/TrueTechHack/server/build/CMakeFiles/handler.dir
+/home/ggame/developing/TrueTechHack/t1/TrueTechHack/server/build/CMakeFiles/edit_cache.dir
+/home/ggame/developing/TrueTechHack/t1/TrueTechHack/server/build/CMakeFiles/rebuild_cache.dir
