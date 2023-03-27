@@ -39,7 +39,8 @@ int main(int argc, char const *argv[])
                 std::cout << "Ok" << std::endl;
             }
         } else if (command == "filter") {
-            int id, value = 0;
+            int id;
+            double value = 0;
             std::string filterType;
             std::cin >> id >> filterType >> value;
             request["type"] = "filter";
@@ -67,6 +68,15 @@ int main(int argc, char const *argv[])
             if (reply["ans"] == "ok") {
                 std::cout << "Ok" << std::endl;
             }
+        } else if (command == "remove") {
+            int id;
+            std::cin >> id;
+            request["type"] = "remove";
+            request["id"] = id;
+            nlohmann::json reply = sendAndRecv(request, sockets[id].second, 0);
+            destroySock(sockets[id].first, sockets[id].second);
+            sockets.erase(id);
+            std::cout << "Ok" << std::endl;
         }
     }
     return 0;

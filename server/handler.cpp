@@ -1,6 +1,7 @@
 #include "tools.h"
 #include <opencv2/opencv.hpp>
 #include <nadjieb/mjpeg_streamer.hpp>
+#include <algorithm>
 
 using MJPEGStreamer = nadjieb::MJPEGStreamer;
 
@@ -120,6 +121,7 @@ void film(std::string filmName, int port)
             }
         }
     }
+    std::cout << "end of thread" << std::endl;
 }
 
 int main(int argc, char const *argv[])
@@ -150,12 +152,16 @@ int main(int argc, char const *argv[])
         } else if (reply["type"] == "filter" || reply["type"] == "pause" || reply["type"] == "resume") {
             request["ans"] = "ok";
             commands.push(reply);
+        } else if (reply["type"] == "remove") {
+            request["ans"] = "ok";
+            flag = 0;
         }
         Send(request, socket);
     }
     if (!callback) {
         filmThread.detach();
-        destroySock(context, socket);
     }
+    socket.disconnect(("tcp://127.0.0.1:" + std::to_string(port)).c_str());
+    destroySock(context, socket);
     return 0;
 }
