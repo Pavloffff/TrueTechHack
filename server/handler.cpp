@@ -6,7 +6,7 @@
 using MJPEGStreamer = nadjieb::MJPEGStreamer;
 
 std::queue<nlohmann::json> commands;
-int callback = 1;
+int callback = -1;
 
 void film(std::string filmName, int port)
 {
@@ -15,7 +15,7 @@ void film(std::string filmName, int port)
     MJPEGStreamer streamer;
     nlohmann::json command;
     command["type"] = "empty";
-    while (callback) {
+    while (callback == 1) {
         if (!commands.empty()) {
             command = commands.front();
             commands.pop();
@@ -40,7 +40,7 @@ void film(std::string filmName, int port)
                 double brightness, contrast, saturate;
                 int brightFlag = 0, contrFlag = 0, saturFlag = 0, filterflag = 0, monoFlag = 0, blueFlag = 0;
                 cap >> frame;
-                if (frame.empty()) {
+                if (frame.empty() || command["type"] == "remove") {
                     std::cout << port << ": end of video\n";
                     streamer.stop();
                     callback = 0;
@@ -135,9 +135,9 @@ int main(int argc, char const *argv[])
     int serverPort = port + 1;
     std::string filmName = argv[2];
     int flag = 1;
-    while (flag && callback) {
+    while (flag) {
         nlohmann::json reply = Recv(socket);
-        if (!callback) {
+        if (callback == 0) {
             break;
         }
         reply["ans"] = "error";
@@ -146,6 +146,7 @@ int main(int argc, char const *argv[])
             request["ans"] = "ok";
             request["port"] = serverPort;
         } else if (reply["type"] == "start") {
+            callback = 1;
             request["ans"] = "ok";
             filmThread = std::thread(film, argv[2], serverPort);
             commands.push(reply);
@@ -153,12 +154,13 @@ int main(int argc, char const *argv[])
             request["ans"] = "ok";
             commands.push(reply);
         } else if (reply["type"] == "remove") {
+            commands.push(reply);
             request["ans"] = "ok";
             flag = 0;
         }
         Send(request, socket);
     }
-    if (!callback) {
+    if (callback >= 0) {
         filmThread.detach();
     }
     socket.disconnect(("tcp://127.0.0.1:" + std::to_string(port)).c_str());
