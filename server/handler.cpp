@@ -26,9 +26,9 @@ void film(std::string filmName, int port)
                     command = commands.front();
                     commands.pop();
                 }
-                int brightness, contrast;
-                int brightFlag = 0, contrFlag = 0, saturFlag = 0;
-                cv::Mat frame, brightenedImage, contrastedImage, res;
+                double brightness, contrast, saturate;
+                int brightFlag = 0, contrFlag = 0, saturFlag = 0, filterflag = 0, monoFlag = 0;
+                cv::Mat frame, brightenedImage, contrastedImage, saturatedImage, monochromaticImage, res;
                 cap >> frame;
                 if (frame.empty()) {
                     std::cout << port << ": end of video\n";
@@ -43,6 +43,11 @@ void film(std::string filmName, int port)
                     } else if (command["filterType"] == "contrast") {
                         contrast = command["value"];
                         contrFlag = 1;
+                    } else if (command["filterType"] == "saturate") {
+                        saturate = command["value"];
+                        saturFlag = 1;
+                    } else if (command["filterType"] == "monochromatic") {
+                        monoFlag = 1;
                     }
                 } 
                 if (brightFlag) {
@@ -58,7 +63,32 @@ void film(std::string filmName, int port)
                         res = contrastedImage;
                     }
                 }
-                if (!contrFlag && !brightFlag) {
+                if (saturFlag) {
+                    if (brightFlag || contrFlag) {
+                        cv::cvtColor(res, saturatedImage, cv::COLOR_BGR2HSV);
+                    } else {
+                        cv::cvtColor(frame, saturatedImage, cv::COLOR_BGR2HSV);
+                    }
+                    std::vector<cv::Mat> channels;
+                    cv::split(saturatedImage, channels);
+                    channels[1] *= saturate;
+                    cv::merge(channels, saturatedImage);
+                    cv::cvtColor(saturatedImage, saturatedImage, cv::COLOR_HSV2BGR);
+                    res = saturatedImage;
+                }
+                if (monoFlag) {
+                    if (brightFlag || contrFlag) {
+                        cv::cvtColor(res, monochromaticImage, cv::COLOR_BGR2HSV);
+                    } else {
+                        cv::cvtColor(frame, monochromaticImage, cv::COLOR_BGR2HSV);
+                    }
+                    int hue_val = 20; 
+                    monochromaticImage.forEach<cv::Vec3b>([&hue_val](cv::Vec3b& pixel, const int* position) { 
+                        pixel[0] = (pixel[0] + hue_val) % 180; 
+                    });
+                    cv::cvtColor(monochromaticImage, res, cv::COLOR_HSV2BGR);
+                }
+                if (!contrFlag && !brightFlag && !saturFlag && !monoFlag) {
                     res = frame;
                 }
                 std::vector<uchar> buff;
@@ -84,6 +114,9 @@ int main(int argc, char const *argv[])
     int flag = 1;
     while (flag && callback) {
         nlohmann::json reply = Recv(socket);
+        if (!callback) {
+            break;
+        }
         reply["ans"] = "error";
         nlohmann::json request = reply;
         if (reply["type"] == "getPort") {
