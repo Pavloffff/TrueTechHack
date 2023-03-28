@@ -45,41 +45,14 @@ int main(int argc, char const *argv[])
         }
 
         nlohmann::json request;
-        request["type"] = "getPort";
+        request["type"] = "start";
         nlohmann::json reply = sendAndRecv(request, socket, 0);
         if (reply["ans"] == "ok") {
             sockets[id] = std::make_pair(std::move(context), std::move(socket));
-            
-        } else {
-            return crow::response(400);
-            destroySock(context, socket);
-        }
-        nlohmann::json request2;
-        request2["type"] = "start";
-        nlohmann::json reply2 = sendAndRecv(request2, sockets[id].second, 0);
-        if (reply2["ans"] == "ok")
-        {
             return crow::response{reply["port"].dump()};
         } else {
-            return crow::response(400);
-        }
-        
-    });
-
-    CROW_ROUTE(app, "/start").methods(crow::HTTPMethod::POST)([](const crow::request &req) {
-        auto data = crow::json::load(req.body);
-        if (!data) {
-            return crow::response(400);
-        }
-        std::string login = data["login"].s();
-        int id = logins[login];
-        nlohmann::json request;
-        request["type"] = "start";
-        nlohmann::json reply = sendAndRecv(request, sockets[id].second, 0);
-        if (reply["ans"] == "ok")
-        {
-            return crow::response(200);
-        }
+            destroySock(context, socket);
+        } 
     });
 
     CROW_ROUTE(app, "/filter").methods(crow::HTTPMethod::POST)([](const crow::request &req) {

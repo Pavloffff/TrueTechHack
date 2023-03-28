@@ -6,8 +6,5 @@ export const services = {
 	async postUser(userData) {
 		const data = await (await axios.post(URL_API + '/create', userData)).data
 		return data
-	},
-	async start(data) {
-		await axios.post(URL_API + '/start', data)
-	},
+	}
 }

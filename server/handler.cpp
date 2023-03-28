@@ -200,12 +200,10 @@ int main(int argc, char const *argv[])
         }
         reply["ans"] = "error";
         nlohmann::json request = reply;
-        if (reply["type"] == "getPort") {
+        if (reply["type"] == "start") {
             request["ans"] = "ok";
             request["port"] = serverPort;
-        } else if (reply["type"] == "start") {
             callback = 1;
-            request["ans"] = "ok";
             filmThread = std::thread(film, argv[2], serverPort);
             commands.push(reply);
         } else if (reply["type"] == "filter" || reply["type"] == "pause" || reply["type"] == "resume" || reply["type"] == "shift") {
