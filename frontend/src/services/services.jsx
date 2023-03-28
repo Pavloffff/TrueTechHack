@@ -10,4 +10,10 @@ export const services = {
 	async pause(userData) {
 		await axios.post(URL_API + '/pause', userData)
 	},
+    async resume(userData) {
+		await axios.post(URL_API + '/resume', userData)
+	},
+    async shift(userData) {
+		await axios.post(URL_API + '/shift', userData)
+	},
 }

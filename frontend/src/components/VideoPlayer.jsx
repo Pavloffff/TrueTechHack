@@ -31,6 +31,38 @@ const VideoPlayer = () => {
 				>
 					pause
 				</button>
+                <button
+					className={styles.btn}
+					onClick={() =>
+						services.resume({
+							login: JSON.parse(localStorage.getItem('login')).login,
+						})
+					}
+				>
+					resume
+				</button>
+                <button
+					className={styles.btn}
+					onClick={() =>
+						services.shift({
+							login: JSON.parse(localStorage.getItem('login')).login,
+                            vct: "left",
+						})
+					}
+				>
+					left
+				</button>
+                <button
+					className={styles.btn}
+					onClick={() =>
+						services.shift({
+							login: JSON.parse(localStorage.getItem('login')).login,
+                            vct: "right",
+						})
+					}
+				>
+					right
+				</button>
 			</div>
 		</div>
 	)
