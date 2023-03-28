@@ -1,10 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
-import VideoPlayer from '../components/VideoPlayer'
+import { useMutation } from '@tanstack/react-query'
 import { services } from '../services/services'
 import styles from '../styles/FilmScreen.module.scss'
 
 const FilmScreen = () => {
+	const mutation = useMutation({
+		mutationFn: () =>
+			services.start({
+				login: JSON.parse(localStorage.getItem('login')).login,
+			}),
+	})
+
 	const { data, isLoading, isSuccess, isError, error } = useQuery({
 		queryKey: ['getPort'],
 		queryFn: () =>
@@ -12,6 +18,9 @@ const FilmScreen = () => {
 				login: JSON.parse(localStorage.getItem('login')).login,
 				filmName: '806.mp4',
 			}),
+		onSuccess: () => {
+			mutation.mutate()
+		},
 		refetchOnWindowFocus: false,
 	})
 
@@ -19,7 +28,11 @@ const FilmScreen = () => {
 		<div className={styles.content}>
 			{isLoading && <h1>Loading...</h1>}
 			{isError && <h1>{error.message}</h1>}
-			{isSuccess && <VideoPlayer port={data} />}
+			{isSuccess && (
+				<div>
+					<img src={`http://localhost:${data}/video`} />
+				</div>
+			)}
 		</div>
 	)
 }
