@@ -9,9 +9,7 @@ const VideoPlayer = ({ port }) => {
 			}),
 	})
 
-	return (
-		<img src={`http://localhost:${port}/video`} onClick={mutation.mutate()} />
-	)
+	return <img src={`http://localhost:${port}/video`} />
 }
 
 export default VideoPlayer
