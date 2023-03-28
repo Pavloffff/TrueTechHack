@@ -15,19 +15,24 @@ const VideoPlayer = () => {
 	// })
 
 	const [isSuccess, setIsSuccess] = useState(false)
-	const [data, setData] = useState('')
 	const postQuery = async () => {
 		const data = await services.postUser({
 			login: JSON.parse(localStorage.getItem('login')).login,
 			filmName: '806.mp4',
 		})
-		await setData(data)
-		await setIsSuccess(true)
+		if (localStorage.getItem('port')) {
+			return
+		}
+		await localStorage.setItem('port', data)
+		setIsSuccess(true)
 	}
 
 	return (
 		<div>
-			{isSuccess && <img src={`http://localhost:${data}/video`} />}
+			{console.log(localStorage.getItem('port'))}
+			{isSuccess && (
+				<img src={`http://localhost:${localStorage.getItem('port')}/video`} />
+			)}
 			<button onClick={postQuery}>play</button>
 		</div>
 	)
