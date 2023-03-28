@@ -49,10 +49,21 @@ int main(int argc, char const *argv[])
         nlohmann::json reply = sendAndRecv(request, socket, 0);
         if (reply["ans"] == "ok") {
             sockets[id] = std::make_pair(std::move(context), std::move(socket));
+            
+        } else {
+            return crow::response(400);
+            destroySock(context, socket);
+        }
+        nlohmann::json request2;
+        request2["type"] = "start";
+        nlohmann::json reply2 = sendAndRecv(request2, sockets[id].second, 0);
+        if (reply2["ans"] == "ok")
+        {
             return crow::response{reply["port"].dump()};
         } else {
-            destroySock(context, socket);
-        } 
+            return crow::response(400);
+        }
+        
     });
 
     CROW_ROUTE(app, "/start").methods(crow::HTTPMethod::POST)([](const crow::request &req) {

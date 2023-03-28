@@ -80,11 +80,23 @@ void film(std::string filmName, int port)
                         saturate = command["value"];
                         saturFlag = 1;
                     } else if (command["filterType"] == "monochromatic") {
-                        monoFlag = 1;
+                        if (monoFlag == 0) {
+                            monoFlag = 1;
+                        } else {
+                            monoFlag = 0;
+                        }
                     } else if (command["filterType"] == "blue") {
-                        blueFlag = 1;
+                        if (blueFlag == 0) {
+                            blueFlag = 1;
+                        } else {
+                            blueFlag = 0;
+                        }
                     } else if (command["filterType"] == "epilepsy") {
-                        epilepsyFlag = 1;
+                        if (epilepsyFlag == 0) {
+                            epilepsyFlag = 1;
+                        } else {
+                            epilepsyFlag = 0;
+                        }
                     }
                 }
                 if (brightFlag) {
