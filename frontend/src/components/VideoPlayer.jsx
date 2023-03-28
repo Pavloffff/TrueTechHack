@@ -12,6 +12,7 @@ const VideoPlayer = ({ port }) => {
 
 	return (
 		<div>
+			{console.log(`http://localhost:${port}/video`)}
 			<img src={`http://localhost:${port}/video`} />
 			<button onClick={() => mutation.mutate()}>start</button>
 		</div>
