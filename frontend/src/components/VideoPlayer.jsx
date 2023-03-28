@@ -10,11 +10,12 @@ const VideoPlayer = ({ port }) => {
 			}),
 	})
 
-	useEffect(() => {
-		mutation.mutate()
-	}, [])
-
-	return <img src={`http://localhost:${port}/video`} />
+	return (
+		<div>
+			<img src={`http://localhost:${port}/video`} />
+			<button onClick={() => mutation.mutate()}>start</button>
+		</div>
+	)
 }
 
 export default VideoPlayer
