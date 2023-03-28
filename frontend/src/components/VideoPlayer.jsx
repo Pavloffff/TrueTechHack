@@ -1,7 +1,8 @@
 import { services } from '../services/services'
+import styles from '../styles/VideoPlayer.module.scss'
 
 const VideoPlayer = () => {
-	const postQuery = async () => {
+	const play = async () => {
 		const data = await services.postUser({
 			login: JSON.parse(localStorage.getItem('login')).login,
 			filmName: '806.mp4',
@@ -10,14 +11,27 @@ const VideoPlayer = () => {
 			return
 		}
 		await localStorage.setItem('port', data)
-		setIsSuccess(true)
 	}
 
 	return (
 		<div>
 			{console.log(localStorage.getItem('port'))}
 			<img src={`http://localhost:${localStorage.getItem('port')}/video`} />
-			<button onClick={postQuery}>play</button>
+			<div className={styles.btns}>
+				<button className={styles.btn} onClick={play}>
+					play
+				</button>
+				<button
+					className={styles.btn}
+					onClick={() =>
+						services.pause({
+							login: JSON.parse(localStorage.getItem('login')).login,
+						})
+					}
+				>
+					pause
+				</button>
+			</div>
 		</div>
 	)
 }

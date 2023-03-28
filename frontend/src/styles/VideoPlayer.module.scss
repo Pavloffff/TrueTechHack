@@ -1,0 +1,7 @@
+.btns {
+	@apply flex justify-between items-center;
+
+	.btn {
+		@apply bg-white rounded-lg p-2 mr-2 flex justify-center items-center;
+	}
+}

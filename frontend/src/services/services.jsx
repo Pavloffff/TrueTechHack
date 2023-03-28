@@ -7,4 +7,7 @@ export const services = {
 		const data = await (await axios.post(URL_API + '/create', userData)).data
 		return data
 	},
+	async pause(userData) {
+		await axios.post(URL_API + '/pause', userData)
+	},
 }
