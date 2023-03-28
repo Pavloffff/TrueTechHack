@@ -16,7 +16,7 @@ const VideoPlayer = () => {
 
 	const [isSuccess, setIsSuccess] = useState(false)
 	const [data, setData] = useState('')
-	const poastQuery = async () => {
+	const postQuery = async () => {
 		setIsSuccess(true)
 		const data = await services.postUser({
 			login: JSON.parse(localStorage.getItem('login')).login,
@@ -28,7 +28,7 @@ const VideoPlayer = () => {
 	return (
 		<div>
 			{isSuccess && <img src={`http://localhost:${data}/video`} />}
-			<button onClick={poastQuery}>play</button>
+			<button onClick={postQuery}>play</button>
 		</div>
 	)
 }
