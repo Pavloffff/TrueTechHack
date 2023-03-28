@@ -19,4 +19,7 @@ export const services = {
     async filter(userData) {
 		await axios.post(URL_API + '/filter', userData)
 	},
+    async remove(userData) {
+		await axios.post(URL_API + '/remove', userData)
+	},
 }

@@ -136,7 +136,7 @@ void film(std::string filmName, int port)
                                 pixel[2] = std::min(pixel[2] + (20 * contrIncrement), 255); 
                             } else {
                                 pixel[2] = std::max(pixel[2] - (20 * contrIncrement), 0); 
-                            } 
+                            }
                             contrastedImage.at<cv::Vec3b>(i, j) = pixel; 
                         } 
                     }

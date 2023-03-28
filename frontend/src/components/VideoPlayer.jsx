@@ -201,6 +201,16 @@ const VideoPlayer = () => {
                 >
                     hueIncriment
                 </button>
+                <button
+                    className={styles.btn}
+                    onClick={() =>
+                        services.remove({
+                            login: JSON.parse(localStorage.getItem('login')).login,
+                        })
+                    }
+                >
+                    remove
+                </button>
             </div>
         </div>
     )
