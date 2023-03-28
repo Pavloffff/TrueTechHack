@@ -29,6 +29,7 @@ void film(std::string filmName, int port)
     MJPEGStreamer streamer;
     nlohmann::json command;
     command["type"] = "empty";
+    int frameFlag = 1, width, heigth;
     int brightFlag = 0, contrFlag = 0, saturFlag = 0, filterflag = 0, monoFlag = 0, blueFlag = 0, epilepsyFlag = 0, hueFlag = 0;
     double brightness, contrast, saturate;
     int brightIncrement = 0, contrIncrement = 0, saturIncrement = 0, hueIncrement = 0;
@@ -56,6 +57,11 @@ void film(std::string filmName, int port)
                     }
                 }
                 cap >> frame;
+                if (frameFlag) {
+                    heigth = frame.rows;
+                    width = frame.cols;
+                    frameFlag = 0;
+                }
                 if (frame.empty() || command["type"] == "remove") {
                     std::cout << port << ": end of video\n";
                     streamer.stop();
@@ -190,7 +196,17 @@ void film(std::string filmName, int port)
                         darkFramesCounter = darkFramesCount;
                     }
                     if (darkFramesCounter > 0) {
-                        res = cv::Mat::zeros(frame.size(), frame.type());
+                        cv::Mat epilepsyScreen = cv::Mat::zeros(heigth, width, CV_8UC3);
+                        epilepsyScreen.setTo(cv::Scalar(125, 125, 125)); 
+                        cv::Scalar color(80, 80, 80); // серый цвет текста 
+                        int fontFace = cv::FONT_HERSHEY_SIMPLEX; 
+                        double fontScale = width / 350; 
+                        int thickness = width / 200; 
+                        cv::Point textOrg(50, heigth / 2 - heigth / 5); // координаты текста 
+                        cv::putText(epilepsyScreen, "this scene can cause", textOrg, fontFace, fontScale, color, thickness);
+                        cv::Point textOrg2(50, heigth / 2 + heigth / 5);
+                        cv::putText(epilepsyScreen, "an epileptic seizure", textOrg2, fontFace, fontScale, color, thickness);
+                        res = epilepsyScreen;
                         darkFramesCounter--;
                     } else if (!contrFlag && !brightFlag && !saturFlag && !monoFlag && !blueFlag) {
                         res = frame;
