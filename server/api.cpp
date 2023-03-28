@@ -4,7 +4,7 @@
 std::map<int, std::pair<zmq::context_t, zmq::socket_t>> sockets;
 
 std::map<std::string, int> logins;
-int curId = 5;
+std::vector<int> ids;
 
 // http://127.0.0.1:4999/create
 
@@ -18,9 +18,20 @@ int main(int argc, char const *argv[])
             return crow::response(400);
         }
         std::string login = data["login"].s();
-        logins[login] = curId;
-        curId++;
-        int id = logins[login];
+        int id = 0, k = 0;
+        for (int i = 0; i < ids.size(); i++) {
+            if (ids[i] == 0) {
+                ids[i] = 1;
+                id = i;
+                k = 1;
+                break;
+            }
+        }
+        if (k == 0) {
+            id = ids.size();
+            ids.push_back(1);
+        }
+        logins[login] = id;
         std::string filmName = data["filmName"].s();
         int port = MINPORT + id * 2;
         zmq::context_t context;
@@ -130,6 +141,8 @@ int main(int argc, char const *argv[])
         nlohmann::json reply = sendAndRecv(request, sockets[id].second, 0);
         destroySock(sockets[id].first, sockets[id].second);
         sockets.erase(id);
+        logins.erase(login);
+        ids[id] = 0;
         return crow::response(200);
     });
 
