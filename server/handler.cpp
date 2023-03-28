@@ -29,11 +29,13 @@ void film(std::string filmName, int port)
     MJPEGStreamer streamer;
     nlohmann::json command;
     command["type"] = "empty";
+    int brightFlag = 0, contrFlag = 0, saturFlag = 0, filterflag = 0, monoFlag = 0, blueFlag = 0, epilepsyFlag = 0;
     while (callback == 1) {
         if (!commands.empty()) {
             command = commands.front();
             commands.pop();
         }
+        
         if (command["type"] == "start") {
             streamer.start(port);
             while (streamer.isRunning()) {
@@ -52,7 +54,7 @@ void film(std::string filmName, int port)
                     }
                 }
                 double brightness, contrast, saturate;
-                int brightFlag = 0, contrFlag = 0, saturFlag = 0, filterflag = 0, monoFlag = 0, blueFlag = 0, epilepsyFlag = 0;
+                
                 cap >> frame;
                 if (frame.empty() || command["type"] == "remove") {
                     std::cout << port << ": end of video\n";
@@ -80,24 +82,13 @@ void film(std::string filmName, int port)
                         saturate = command["value"];
                         saturFlag = 1;
                     } else if (command["filterType"] == "monochromatic") {
-                        if (monoFlag == 0) {
-                            monoFlag = 1;
-                        } else {
-                            monoFlag = 0;
-                        }
+                        monoFlag = !monoFlag;
                     } else if (command["filterType"] == "blue") {
-                        if (blueFlag == 0) {
-                            blueFlag = 1;
-                        } else {
-                            blueFlag = 0;
-                        }
+                        blueFlag = !blueFlag;
                     } else if (command["filterType"] == "epilepsy") {
-                        if (epilepsyFlag == 0) {
-                            epilepsyFlag = 1;
-                        } else {
-                            epilepsyFlag = 0;
-                        }
+                        epilepsyFlag = !epilepsyFlag;
                     }
+                    command["filterType"] = "empty";
                 }
                 if (brightFlag) {
                     frame.convertTo(brightenedImage, -1, 1, brightness);

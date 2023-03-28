@@ -16,4 +16,7 @@ export const services = {
     async shift(userData) {
 		await axios.post(URL_API + '/shift', userData)
 	},
+    async filter(userData) {
+		await axios.post(URL_API + '/filter', userData)
+	},
 }
