@@ -25,13 +25,13 @@ const RegistrationScreen = () => {
 					className={styles.input}
 					type='text'
 					placeholder='login'
-					{...register('login')}
+					{...register('login', { required: true })}
 				/>
 				<input
 					className={styles.input}
 					type='password'
 					placeholder='password'
-					{...register('password')}
+					{...register('password', { required: true })}
 				/>
 				<input className={styles.submit} type='submit' />
 			</form>

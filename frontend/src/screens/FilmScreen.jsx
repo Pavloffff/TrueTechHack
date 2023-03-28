@@ -12,7 +12,7 @@ const FilmScreen = () => {
 				login: JSON.parse(localStorage.getItem('login')).login,
 				filmName: '806.mp4',
 			}),
-		enabled: false,
+		refetchOnWindowFocus: false,
 	})
 
 	return (
