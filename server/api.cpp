@@ -62,13 +62,13 @@ int main(int argc, char const *argv[])
         }
         std::string login = data["login"].s();
         int id = logins[login];
-        double value = data["value"].d();
+        std::string vct = data["vct"].s();
         std::string filterType = data["filterType"].s();
         nlohmann::json request;
 
         request["type"] = "filter";
         request["filterType"] = filterType;
-        request["value"] = value;
+        request["vct"] = vct;
         nlohmann::json reply = sendAndRecv(request, sockets[id].second, 0);
         if (reply["ans"] == "ok")
         {

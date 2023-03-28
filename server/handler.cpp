@@ -29,7 +29,9 @@ void film(std::string filmName, int port)
     MJPEGStreamer streamer;
     nlohmann::json command;
     command["type"] = "empty";
-    int brightFlag = 0, contrFlag = 0, saturFlag = 0, filterflag = 0, monoFlag = 0, blueFlag = 0, epilepsyFlag = 0;
+    int brightFlag = 0, contrFlag = 0, saturFlag = 0, filterflag = 0, monoFlag = 0, blueFlag = 0, epilepsyFlag = 0, hueFlag = 0;
+    double brightness, contrast, saturate;
+    int brightIncrement = 0, contrIncrement = 0, saturIncrement = 0, hueIncrement = 0;
     while (callback == 1) {
         if (!commands.empty()) {
             command = commands.front();
@@ -43,7 +45,7 @@ void film(std::string filmName, int port)
                     command = commands.front();
                     commands.pop();
                 }
-                cv::Mat frame, brightenedImage, contrastedImage, saturatedImage, monochromaticImage, res;
+                cv::Mat frame, brightenedImage, contrastedImage, saturatedImage, huedImage, monochromaticImage, res;
                 if (command["type"] == "pause") {
                     while (command["type"] != "resume") {
                         if (!commands.empty()) {
@@ -53,8 +55,6 @@ void film(std::string filmName, int port)
                         continue;
                     }
                 }
-                double brightness, contrast, saturate;
-                
                 cap >> frame;
                 if (frame.empty() || command["type"] == "remove") {
                     std::cout << port << ": end of video\n";
@@ -73,13 +73,29 @@ void film(std::string filmName, int port)
                 }
                 if (command["type"] == "filter") {
                     if (command["filterType"] == "brightness") {
-                        brightness = command["value"];
+                        brightness = cv::mean(frame)[0];
+                        if (command["vct"] == "left") {
+                            brightIncrement--;
+                        } else {
+                            brightIncrement++;
+                        }
                         brightFlag = 1;
                     } else if (command["filterType"] == "contrast") {
-                        contrast = command["value"];
+                        if (command["vct"] == "left") {
+                            contrIncrement--;
+                        } else {
+                            contrIncrement++;
+                        }
                         contrFlag = 1;
                     } else if (command["filterType"] == "saturate") {
-                        saturate = command["value"];
+                        cv::Mat hsvImg;
+                        cv::cvtColor(frame, hsvImg, cv::COLOR_BGR2HSV);
+                        saturate = cv::mean(hsvImg)[1];
+                        if (command["vct"] == "left") {
+                            saturIncrement--;
+                        } else {
+                            saturIncrement++;
+                        }
                         saturFlag = 1;
                     } else if (command["filterType"] == "monochromatic") {
                         monoFlag = !monoFlag;
@@ -87,21 +103,44 @@ void film(std::string filmName, int port)
                         blueFlag = !blueFlag;
                     } else if (command["filterType"] == "epilepsy") {
                         epilepsyFlag = !epilepsyFlag;
+                    } else if (command["filterType"] == "hue") {
+                        if (command["vct"] == "left") {
+                            hueIncrement--;
+                        } else {
+                            hueIncrement++;
+                        }
+                        hueFlag = 1;
                     }
                     command["filterType"] = "empty";
                 }
                 if (brightFlag) {
-                    frame.convertTo(brightenedImage, -1, 1, brightness);
-                    res = brightenedImage;
+                    cv::cvtColor(frame, brightenedImage, cv::COLOR_BGR2HSV); 
+                    std::vector<cv::Mat> channels; 
+                    cv::split(brightenedImage, channels);
+                    channels[2] += (50 * brightIncrement); 
+                    cv::merge(channels, brightenedImage);
+                    cv::cvtColor(brightenedImage, res, cv::COLOR_HSV2BGR);
                 }
                 if (contrFlag) {
                     if (brightFlag) {
-                        res.convertTo(contrastedImage, -1, contrast, 0);
-                        res = contrastedImage;
+                        cv::cvtColor(res, contrastedImage, cv::COLOR_BGR2HSV);
                     } else {
-                        frame.convertTo(contrastedImage, -1, contrast, 0);
-                        res = contrastedImage;
+                        cv::cvtColor(frame, contrastedImage, cv::COLOR_BGR2HSV);
                     }
+                    int rows = contrastedImage.rows; 
+                    int cols = contrastedImage.cols;
+                    for (int i = 0; i < rows; i++) { 
+                        for (int j = 0; j < cols; j++) { 
+                            cv::Vec3b pixel = contrastedImage.at<cv::Vec3b>(i, j); 
+                            if (pixel[2] >= 127) {
+                                pixel[2] = std::min(pixel[2] + (20 * contrIncrement), 255); 
+                            } else {
+                                pixel[2] = std::max(pixel[2] - (20 * contrIncrement), 0); 
+                            } 
+                            contrastedImage.at<cv::Vec3b>(i, j) = pixel; 
+                        } 
+                    }
+                    cv::cvtColor(contrastedImage, res, cv::COLOR_HSV2BGR);
                 }
                 if (saturFlag) {
                     if (brightFlag || contrFlag) {
@@ -109,12 +148,11 @@ void film(std::string filmName, int port)
                     } else {
                         cv::cvtColor(frame, saturatedImage, cv::COLOR_BGR2HSV);
                     }
-                    std::vector<cv::Mat> channels;
+                    std::vector<cv::Mat> channels; 
                     cv::split(saturatedImage, channels);
-                    channels[1] *= saturate;
+                    channels[1] += (50 * saturIncrement); 
                     cv::merge(channels, saturatedImage);
-                    cv::cvtColor(saturatedImage, saturatedImage, cv::COLOR_HSV2BGR);
-                    res = saturatedImage;
+                    cv::cvtColor(saturatedImage, res, cv::COLOR_HSV2BGR);
                 }
                 if (monoFlag) {
                     if (brightFlag || contrFlag) {
@@ -149,7 +187,6 @@ void film(std::string filmName, int port)
                     double brightVal = meanHSV.val[0];
                     double colorChange = cv::mean(cv::abs(hsvChannels[0](cv::Rect(0, 1, hsvChannels[0].cols, hsvChannels[0].rows-1)) - hsvChannels[0](cv::Rect(0, 0, hsvChannels[0].cols, hsvChannels[0].rows-1)))).val[0];
                     if (colorChange > colorThreshold || std::abs(brightVal - lastBrightness) > brightnessThreshold) {
-                        std::cout << "Этот кадр может содержать эпилептическую сцену!" << std::endl;
                         darkFramesCounter = darkFramesCount;
                     }
                     if (darkFramesCounter > 0) {
@@ -160,7 +197,19 @@ void film(std::string filmName, int port)
                     }
                     lastBrightness = brightVal;
                 }
-                if (!contrFlag && !brightFlag && !saturFlag && !monoFlag && !blueFlag && !epilepsyFlag) {
+                if (hueFlag) {
+                    if (brightFlag || contrFlag || monoFlag || blueFlag || epilepsyFlag) {
+                        cv::cvtColor(res, huedImage, cv::COLOR_BGR2HSV);
+                    } else {
+                        cv::cvtColor(frame, huedImage, cv::COLOR_BGR2HSV);
+                    }
+                    std::vector<cv::Mat> channels; 
+                    cv::split(huedImage, channels);
+                    channels[0] += (30 * hueIncrement); 
+                    cv::merge(channels, huedImage);
+                    cv::cvtColor(huedImage, res, cv::COLOR_HSV2BGR);
+                }
+                if (!contrFlag && !brightFlag && !saturFlag && !monoFlag && !blueFlag && !epilepsyFlag && !hueFlag) {
                     res = frame;
                 }
                 std::vector<uchar> buff;
