@@ -17,12 +17,12 @@ const VideoPlayer = () => {
 	const [isSuccess, setIsSuccess] = useState(false)
 	const [data, setData] = useState('')
 	const postQuery = async () => {
-		setIsSuccess(true)
 		const data = await services.postUser({
 			login: JSON.parse(localStorage.getItem('login')).login,
 			filmName: '806.mp4',
 		})
 		await setData(data)
+		await setIsSuccess(true)
 	}
 
 	return (
