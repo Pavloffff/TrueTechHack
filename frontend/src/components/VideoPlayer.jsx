@@ -17,8 +17,9 @@ const VideoPlayer = ({ port }) => {
 
 	return (
 		<div>
-			{console.log(`http://localhost:${port}/video`)}
-			{isShowVideo && <img src={`http://localhost:${port}/video`} alt='film' />}
+			{isShowVideo && (
+				<iframe src={`http://localhost:${port}/video`} alt='film' />
+			)}
 			<button
 				onClick={() => {
 					mutation.mutate()
