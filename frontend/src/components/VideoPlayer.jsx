@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { services } from '../services/services'
 
 const VideoPlayer = ({ port }) => {
@@ -8,6 +9,10 @@ const VideoPlayer = ({ port }) => {
 				login: JSON.parse(localStorage.getItem('login')).login,
 			}),
 	})
+
+	useEffect(() => {
+		mutation.mutate()
+	}, [])
 
 	return <img src={`http://localhost:${port}/video`} />
 }
