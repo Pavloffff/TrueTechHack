@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useState } from 'react'
-import { Context, PortContext } from './context/context'
+import { Context } from './context/context'
 import Router from './Router'
 
 function App() {
