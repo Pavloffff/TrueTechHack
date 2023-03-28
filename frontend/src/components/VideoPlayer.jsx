@@ -1,14 +1,17 @@
 import { useMutation } from '@tanstack/react-query'
+import { services } from '../services/services'
 
-const VideoPlayer = ({ url }) => {
+const VideoPlayer = ({ port }) => {
 	const mutation = useMutation({
-		mutationFn: data => services.postUser(data),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['getPort'] })
-		},
+		mutationFn: () =>
+			services.start({
+				login: JSON.parse(localStorage.getItem('login')).login,
+			}),
 	})
 
-	return <img src={url} onClick={mutation.mutate({ command: 'start' })} />
+	return (
+		<img src={`http://localhost:${port}/video`} onClick={mutation.mutate()} />
+	)
 }
 
 export default VideoPlayer
