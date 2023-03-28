@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
 import { services } from '../services/services'
 
 const VideoPlayer = () => {
@@ -22,14 +21,12 @@ const VideoPlayer = () => {
 		},
 		refetchOnWindowFocus: false,
 	})
-	const navigator = useNavigate()
-
-	isSuccess && navigator('film/film')
 
 	return (
 		<div>
 			{isLoading && <h1>Loading...</h1>}
 			{isError && <h1>{error.message}</h1>}
+			{isSuccess && <img src={`http://localhost:5001/video`} />}
 		</div>
 	)
 }
