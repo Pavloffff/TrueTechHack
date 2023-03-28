@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { services } from '../services/services'
 
 const VideoPlayer = ({ port }) => {
