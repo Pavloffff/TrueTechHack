@@ -13,11 +13,9 @@ const Layout = () => {
 					Home
 				</Link>
 				<div className={styles.links}>
-					{localStorage.getItem('login') && !isLogin && (
-						<Link to='registration' className={styles.link}>
-							Registration
-						</Link>
-					)}
+					<Link to='registration' className={styles.link}>
+						Registration
+					</Link>
 					{isLogin ? (
 						<button
 							className={styles.link}
