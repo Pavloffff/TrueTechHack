@@ -14,7 +14,6 @@ const VideoPlayer = () => {
 	// 	refetchOnWindowFocus: false,
 	// })
 
-	const [isSuccess, setIsSuccess] = useState(false)
 	const postQuery = async () => {
 		const data = await services.postUser({
 			login: JSON.parse(localStorage.getItem('login')).login,
@@ -30,9 +29,7 @@ const VideoPlayer = () => {
 	return (
 		<div>
 			{console.log(localStorage.getItem('port'))}
-			{isSuccess && (
-				<img src={`http://localhost:${localStorage.getItem('port')}/video`} />
-			)}
+			<img src={`http://localhost:${localStorage.getItem('port')}/video`} />
 			<button onClick={postQuery}>play</button>
 		</div>
 	)
