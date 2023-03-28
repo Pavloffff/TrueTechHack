@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { services } from '../services/services'
 
 const VideoPlayer = ({ port }) => {
@@ -10,11 +10,20 @@ const VideoPlayer = ({ port }) => {
 			}),
 	})
 
+	const [isShowVideo, setIsShowVideo] = useState(false)
+
 	return (
 		<div>
 			{console.log(`http://localhost:${port}/video`)}
-			{port && <img src={`http://localhost:${port}/video`} />}
-			<button onClick={() => mutation.mutate()}>start</button>
+			{isShowVideo && <img src={`http://localhost:${port}/video`} />}
+			<button
+				onClick={() => {
+					mutation.mutate()
+					setIsShowVideo(true)
+				}}
+			>
+				start
+			</button>
 		</div>
 	)
 }
