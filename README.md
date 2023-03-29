@@ -15,7 +15,6 @@ backend: C++, Crow, unistd.h, ZMQ, nlohmann::json, opencv, mjpeg\
 frontend: 
 
 ## Архитектура:
-
 <img width="720" alt="image" src="./architect.png">
 
 ## Описание алгоритмов:
