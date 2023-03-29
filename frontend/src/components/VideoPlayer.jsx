@@ -231,11 +231,12 @@ const VideoPlayer = ({ nameFilm }) => {
 				<div className={styles.block}>
 					<Button
 						className={styles.btn}
-						onClick={() =>
+						onClick={() => {
 							services.remove({
 								login: JSON.parse(localStorage.getItem('login')).login,
 							})
-						}
+							localStorage.removeItem('start')
+						}}
 						text={<ImCross />}
 					/>
 				</div>
