@@ -1,5 +1,6 @@
 import { services } from '../services/services'
 import styles from '../styles/VideoPlayer.module.scss'
+import Button from './Button'
 
 const VideoPlayer = ({ nameFilm }) => {
 	const play = async () => {
@@ -14,202 +15,186 @@ const VideoPlayer = ({ nameFilm }) => {
 	}
 
 	return (
-		<div>
+		<div className={styles.wrap}>
 			<img src={`http://localhost:${localStorage.getItem('port')}/video`} />
 			<div className={styles.btns}>
-				<button className={styles.btn} onClick={play}>
-					play
-				</button>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.pause({
-							login: JSON.parse(localStorage.getItem('login')).login,
-						})
-					}
-				>
-					pause
-				</button>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.resume({
-							login: JSON.parse(localStorage.getItem('login')).login,
-						})
-					}
-				>
-					resume
-				</button>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.shift({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							vct: 'left',
-						})
-					}
-				>
-					left
-				</button>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.shift({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							vct: 'right',
-						})
-					}
-				>
-					right
-				</button>
-			</div>
-			<div className={styles.btns}>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'epilepsy',
-							vct: 'left',
-						})
-					}
-				>
-					epilepsy
-				</button>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'monochromatic',
-							vct: 'left',
-						})
-					}
-				>
-					daltonism
-				</button>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'blue',
-							vct: 'left',
-						})
-					}
-				>
-					bluefiltr
-				</button>
-			</div>
-			<div className={styles.btns}>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'brightness',
-							vct: 'left',
-						})
-					}
-				>
-					brightnessDecriment
-				</button>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'brightness',
-							vct: 'right',
-						})
-					}
-				>
-					brightnessIncriment
-				</button>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'contrast',
-							vct: 'left',
-						})
-					}
-				>
-					contrastDecriment
-				</button>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'contrast',
-							vct: 'right',
-						})
-					}
-				>
-					contrastIncriment
-				</button>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'saturate',
-							vct: 'left',
-						})
-					}
-				>
-					saturateDecriment
-				</button>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'saturate',
-							vct: 'right',
-						})
-					}
-				>
-					saturateIncriment
-				</button>
-			</div>
-			<div className={styles.btns}>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'hue',
-							vct: 'left',
-						})
-					}
-				>
-					hueDecriment
-				</button>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'hue',
-							vct: 'right',
-						})
-					}
-				>
-					hueIncriment
-				</button>
-				<button
-					className={styles.btn}
-					onClick={() =>
-						services.remove({
-							login: JSON.parse(localStorage.getItem('login')).login,
-						})
-					}
-				>
-					remove
-				</button>
+				<div className={styles.string}>
+					<Button className={styles.btn} onClick={play} text='play' />
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.pause({
+								login: JSON.parse(localStorage.getItem('login')).login,
+							})
+						}
+						text='pause'
+					/>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.resume({
+								login: JSON.parse(localStorage.getItem('login')).login,
+							})
+						}
+						text='resume'
+					/>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.shift({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								vct: 'left',
+							})
+						}
+						text='left'
+					/>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.shift({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								vct: 'right',
+							})
+						}
+						text='right'
+					/>
+				</div>
+				<div className={styles.string}>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'epilepsy',
+								vct: 'left',
+							})
+						}
+						text='epilepsy'
+					/>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'monochromatic',
+								vct: 'left',
+							})
+						}
+						text='monochromatic'
+					/>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'blue',
+								vct: 'left',
+							})
+						}
+						text='bluefiltr'
+					/>
+				</div>
+				<div className={styles.string}>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'brightness',
+								vct: 'left',
+							})
+						}
+						text='brightness decriment'
+					/>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'brightness',
+								vct: 'right',
+							})
+						}
+						text='brightness incriment'
+					/>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'contrast',
+								vct: 'left',
+							})
+						}
+						text='contrast decriment'
+					/>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'contrast',
+								vct: 'right',
+							})
+						}
+						text='contrast incriment'
+					/>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'saturate',
+								vct: 'left',
+							})
+						}
+						text='saturate decriment'
+					/>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'saturate',
+								vct: 'right',
+							})
+						}
+						text='saturate incriment'
+					/>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'hue',
+								vct: 'left',
+							})
+						}
+						text='hue decriment'
+					/>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'hue',
+								vct: 'right',
+							})
+						}
+						text='hue incriment'
+					/>
+				</div>
+				<div className={styles.string}>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.remove({
+								login: JSON.parse(localStorage.getItem('login')).login,
+							})
+						}
+						text='remove'
+					/>
+				</div>
 			</div>
 		</div>
 	)

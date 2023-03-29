@@ -1,7 +1,13 @@
-.btns {
-	@apply flex justify-between items-center;
+.wrap {
+	@apply bg-slate-400 p-3 flex flex-col justify-center items-center;
 
-	.btn {
-		@apply bg-white rounded-lg p-2 mr-2 flex justify-center items-center;
+	.btns {
+		@apply flex flex-col;
+		.string {
+			@apply flex justify-center my-1 flex-wrap;
+			.btn {
+				@apply bg-white rounded-lg p-2 mx-1 flex justify-center items-center;
+			}
+		}
 	}
 }
