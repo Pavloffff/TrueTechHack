@@ -4,6 +4,7 @@ import { MdOutlineDoubleArrow } from 'react-icons/md'
 import { services } from '../services/services'
 import styles from '../styles/VideoPlayer.module.scss'
 import Button from './Button'
+import { ImMinus, ImPlus, ImCross } from 'react-icons/im'
 
 const VideoPlayer = ({ nameFilm }) => {
 	const [isPlay, setIsPlay] = useState(true)
@@ -105,94 +106,106 @@ const VideoPlayer = ({ nameFilm }) => {
 					}
 					text='bluefiltr'
 				/>
-				<Button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'brightness',
-							vct: 'left',
-						})
-					}
-					text='brightness decriment'
-				/>
-				<Button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'brightness',
-							vct: 'right',
-						})
-					}
-					text='brightness incriment'
-				/>
-				<Button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'contrast',
-							vct: 'left',
-						})
-					}
-					text='contrast decriment'
-				/>
-				<Button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'contrast',
-							vct: 'right',
-						})
-					}
-					text='contrast incriment'
-				/>
-				<Button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'saturate',
-							vct: 'left',
-						})
-					}
-					text='saturate decriment'
-				/>
-				<Button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'saturate',
-							vct: 'right',
-						})
-					}
-					text='saturate incriment'
-				/>
-				<Button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'hue',
-							vct: 'left',
-						})
-					}
-					text='hue decriment'
-				/>
-				<Button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'hue',
-							vct: 'right',
-						})
-					}
-					text='hue incriment'
-				/>
+				<div className={styles.block}>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'brightness',
+								vct: 'left',
+							})
+						}
+						text={<ImMinus />}
+					/>
+					яркость
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'brightness',
+								vct: 'right',
+							})
+						}
+						text={<ImPlus />}
+					/>
+				</div>
+				<div className={styles.block}>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'contrast',
+								vct: 'left',
+							})
+						}
+						text={<ImMinus />}
+					/>
+					контрастность
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'contrast',
+								vct: 'right',
+							})
+						}
+						text={<ImPlus />}
+					/>
+				</div>
+				<div className={styles.block}>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'saturate',
+								vct: 'left',
+							})
+						}
+						text={<ImMinus />}
+					/>
+					насыщенность
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'saturate',
+								vct: 'right',
+							})
+						}
+						text={<ImPlus />}
+					/>
+				</div>
+				<div className={styles.block}>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'hue',
+								vct: 'left',
+							})
+						}
+						text={<ImMinus />}
+					/>
+					оттенок
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'hue',
+								vct: 'right',
+							})
+						}
+						text={<ImPlus />}
+					/>
+				</div>
 				<Button
 					className={styles.btn}
 					onClick={() =>
@@ -200,7 +213,7 @@ const VideoPlayer = ({ nameFilm }) => {
 							login: JSON.parse(localStorage.getItem('login')).login,
 						})
 					}
-					text='remove'
+					text={<ImCross />}
 				/>
 			</div>
 		</div>

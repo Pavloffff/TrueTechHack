@@ -3,6 +3,11 @@
 
 	.btns {
 		@apply flex;
+
+		.block {
+			@apply flex items-center;
+		}
+
 		.btn {
 			@apply rounded-lg p-2 mx-1 flex justify-center items-center;
 		}
