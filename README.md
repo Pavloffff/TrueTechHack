@@ -34,7 +34,7 @@ frontend:
 
 ## Запуск
 работает только на linux\
-frontend:\
+frontend:
 ```
 cd frontend
 yarn
