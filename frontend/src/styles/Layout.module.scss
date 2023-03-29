@@ -1,11 +1,15 @@
 .nav {
-	@apply bg-slate-400 h-12 p-3 flex justify-between items-center;
+	@apply bg-white h-24 p-3 flex justify-between items-center shadow-sm;
 
 	.links {
 		@apply flex justify-between;
 	}
 
+	.home {
+		@apply rounded-lg p-2 mr-2 flex justify-center items-center;
+	}
+
 	.link {
-		@apply bg-white rounded-lg p-2 mr-2 flex justify-center items-center;
+		@apply bg-[#E30611] text-gray-50 rounded-lg p-2 mr-2 flex justify-center items-center;
 	}
 }

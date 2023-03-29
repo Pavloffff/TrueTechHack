@@ -9,8 +9,8 @@ const Layout = () => {
 	return (
 		<>
 			<nav className={styles.nav}>
-				<Link to='/' className={styles.link}>
-					Home
+				<Link to='/' className={styles.home}>
+					<img src='/home.png' width='300px' height='300px' />
 				</Link>
 				<div className={styles.links}>
 					<Link to='registration' className={styles.link}>

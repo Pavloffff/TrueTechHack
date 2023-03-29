@@ -10,10 +10,10 @@ const MainScreen = () => {
 		<>
 			{isLogin && (
 				<main className={styles.main}>
-					<LinkToFilm nameFilm='film1' />
-					<LinkToFilm nameFilm='film2' />
-					<LinkToFilm nameFilm='film3' />
-					<LinkToFilm nameFilm='film4' />
+					<LinkToFilm nameFilm='film1.png' />
+					<LinkToFilm nameFilm='film2.png' />
+					<LinkToFilm nameFilm='film3.png' />
+					<LinkToFilm nameFilm='film4.png' />
 				</main>
 			)}
 		</>
