@@ -236,6 +236,7 @@ const VideoPlayer = ({ nameFilm }) => {
 								login: JSON.parse(localStorage.getItem('login')).login,
 							})
 							localStorage.removeItem('start')
+							localStorage.removeItem('port')
 						}}
 						text={<ImCross />}
 					/>
