@@ -12,7 +12,7 @@
 
 ## Стек технологий
 backend: C++, Crow, unistd.h, ZMQ, nlohmann::json, opencv, mjpeg\
-frontend: Js, React, vite, axios, react-router-dom, react-hook-form, sass, tailwindcss\
+frontend: Js, React, vite, axios, react-router-dom, react-hook-form, sass, tailwindcss
 
 ## Архитектура:
 <img width="720" alt="image" src="./architect.png">
