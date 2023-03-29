@@ -6,8 +6,6 @@ import styles from '../styles/MainScreen.module.scss'
 const MainScreen = () => {
 	const { isLogin } = useContext(Context)
 
-	console.log(localStorage.getItem('login'))
-
 	return (
 		<>
 			{isLogin && (

@@ -19,12 +19,12 @@ const LoginScreen = () => {
 			) {
 				setIsLogin(true)
 				setIsEnter(false)
+				navigator(-1)
 			} else {
 				setIsEnter(true)
 			}
 		}
 		reset()
-		navigator(-1)
 	}
 
 	return (

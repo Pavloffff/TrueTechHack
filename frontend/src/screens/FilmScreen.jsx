@@ -7,7 +7,7 @@ const FilmScreen = () => {
 
 	return (
 		<div className={styles.content}>
-			<VideoPlayer nameFilm={nameFilm} />
+			<VideoPlayer nameFilm={nameFilm.pageId} />
 		</div>
 	)
 }

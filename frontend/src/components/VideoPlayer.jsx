@@ -15,7 +15,6 @@ const VideoPlayer = ({ nameFilm }) => {
 
 	return (
 		<div>
-			{console.log(localStorage.getItem('port'))}
 			<img src={`http://localhost:${localStorage.getItem('port')}/video`} />
 			<div className={styles.btns}>
 				<button className={styles.btn} onClick={play}>
