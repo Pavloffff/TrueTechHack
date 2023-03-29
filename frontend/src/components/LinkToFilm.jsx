@@ -5,7 +5,7 @@ const LinkToFilm = ({ nameFilm }) => {
 	return (
 		<div className={styles.wrap}>
 			<Link className={styles.link} to={`films/${nameFilm}`}>
-				<img src={nameFilm} width='500' height='500' />
+				<img src={`${nameFilm}.png`} width='500' height='500' />
 			</Link>
 		</div>
 	)
