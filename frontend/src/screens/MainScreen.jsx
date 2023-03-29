@@ -12,7 +12,10 @@ const MainScreen = () => {
 		<>
 			{isLogin && (
 				<main className={styles.main}>
-					<LinkToFilm info='film1' id='1' />
+					<LinkToFilm nameFilm='film1' />
+					<LinkToFilm nameFilm='film2' />
+					<LinkToFilm nameFilm='film3' />
+					<LinkToFilm nameFilm='film4' />
 				</main>
 			)}
 		</>

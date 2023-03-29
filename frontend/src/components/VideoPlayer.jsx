@@ -1,11 +1,11 @@
 import { services } from '../services/services'
 import styles from '../styles/VideoPlayer.module.scss'
 
-const VideoPlayer = () => {
+const VideoPlayer = ({ nameFilm }) => {
 	const play = async () => {
 		const data = await services.postUser({
 			login: JSON.parse(localStorage.getItem('login')).login,
-			filmName: 'epilepsy.mp4',
+			filmName: { nameFilm },
 		})
 		if (localStorage.getItem('port')) {
 			return
