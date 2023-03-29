@@ -9,11 +9,12 @@ import { FaPlay } from 'react-icons/fa'
 
 const VideoPlayer = ({ nameFilm }) => {
 	const [isPlay, setIsPlay] = useState(true)
+	const filmForSend = nameFilm + '.png'
 
 	const play = async () => {
 		const data = await services.postUser({
 			login: JSON.parse(localStorage.getItem('login')).login,
-			filmName: { nameFilm },
+			filmName: { filmForSend },
 		})
 		if (localStorage.getItem('port')) {
 			return
