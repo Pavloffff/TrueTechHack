@@ -14,7 +14,7 @@ const VideoPlayer = ({ nameFilm }) => {
 	const play = async () => {
 		const data = await services.postUser({
 			login: JSON.parse(localStorage.getItem('login')).login,
-			filmName: { filmForSend },
+			filmName: filmForSend,
 		})
 		if (localStorage.getItem('port')) {
 			return
