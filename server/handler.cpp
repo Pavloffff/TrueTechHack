@@ -245,7 +245,7 @@ int main(int argc, char const *argv[])
     int port = std::atoi(argv[1]);
     zmq::context_t context;
     zmq::socket_t socket(context, zmq::socket_type::pair);
-    socket.connect(("tcp://127.0.0.1:" + std::to_string(port)).c_str());
+    socket.connect(("tcp://localhost:" + std::to_string(port)).c_str());
     int serverPort = port + 1;
     std::string filmName = argv[2];
     int flag = 1;
@@ -275,7 +275,7 @@ int main(int argc, char const *argv[])
     if (callback >= 0) {
         filmThread.detach();
     }
-    socket.disconnect(("tcp://127.0.0.1:" + std::to_string(port)).c_str());
+    socket.disconnect(("tcp://localhost:" + std::to_string(port)).c_str());
     destroySock(context, socket);
     return 0;
 }
