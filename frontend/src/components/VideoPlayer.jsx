@@ -1,8 +1,13 @@
+import { useState } from 'react'
+import { GrPlayFill, GrPauseFill } from 'react-icons/gr'
+import { MdOutlineDoubleArrow } from 'react-icons/md'
 import { services } from '../services/services'
 import styles from '../styles/VideoPlayer.module.scss'
 import Button from './Button'
 
 const VideoPlayer = ({ nameFilm }) => {
+	const [isPlay, setIsPlay] = useState(true)
+
 	const play = async () => {
 		const data = await services.postUser({
 			login: JSON.parse(localStorage.getItem('login')).login,
@@ -19,25 +24,30 @@ const VideoPlayer = ({ nameFilm }) => {
 			<img src={`http://localhost:${localStorage.getItem('port')}/video`} />
 			<div className={styles.btns}>
 				<div className={styles.string}>
-					<Button className={styles.btn} onClick={play} text='play' />
-					<Button
-						className={styles.btn}
-						onClick={() =>
-							services.pause({
-								login: JSON.parse(localStorage.getItem('login')).login,
-							})
-						}
-						text='pause'
-					/>
-					<Button
-						className={styles.btn}
-						onClick={() =>
-							services.resume({
-								login: JSON.parse(localStorage.getItem('login')).login,
-							})
-						}
-						text='resume'
-					/>
+					<Button className={styles.btn} onClick={play} text='start' />
+					{isPlay ? (
+						<Button
+							className={styles.btn}
+							onClick={() => {
+								services.pause({
+									login: JSON.parse(localStorage.getItem('login')).login,
+								})
+								setIsPlay(false)
+							}}
+							text={<GrPauseFill />}
+						/>
+					) : (
+						<Button
+							className={styles.btn}
+							onClick={() => {
+								services.resume({
+									login: JSON.parse(localStorage.getItem('login')).login,
+								})
+								setIsPlay(true)
+							}}
+							text={<GrPlayFill />}
+						/>
+					)}
 					<Button
 						className={styles.btn}
 						onClick={() =>
@@ -46,7 +56,7 @@ const VideoPlayer = ({ nameFilm }) => {
 								vct: 'left',
 							})
 						}
-						text='left'
+						text={<MdOutlineDoubleArrow style={{ rotate: '180deg' }} />}
 					/>
 					<Button
 						className={styles.btn}
@@ -56,7 +66,7 @@ const VideoPlayer = ({ nameFilm }) => {
 								vct: 'right',
 							})
 						}
-						text='right'
+						text={<MdOutlineDoubleArrow />}
 					/>
 				</div>
 				<div className={styles.string}>
