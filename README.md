@@ -16,7 +16,7 @@ frontend:
 
 ## Архитектура:
 
-<img width="720" alt="image" src="./architect.jpeg">
+<img width="720" alt="image" src="./architect.png">
 
 ## Описание алгоритмов:
 
