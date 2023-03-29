@@ -1,11 +1,19 @@
 .wrap {
-	@apply bg-slate-400 p-3 flex flex-col justify-center items-center;
+	@apply flex flex-col justify-center items-center;
+
+	.img {
+		@apply flex justify-center items-center;
+
+		.playbtn {
+			@apply absolute;
+		}
+	}
 
 	.btns {
-		@apply flex;
+		@apply flex bg-gray-300 h-14 items-center;
 
 		.block {
-			@apply flex items-center;
+			@apply flex items-center justify-center bg-gray-400 rounded-lg h-2/3 mx-1;
 		}
 
 		.btn {

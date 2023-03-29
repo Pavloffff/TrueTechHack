@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { GrPlayFill, GrPauseFill } from 'react-icons/gr'
 import { MdOutlineDoubleArrow } from 'react-icons/md'
 import { services } from '../services/services'
 import styles from '../styles/VideoPlayer.module.scss'
 import Button from './Button'
+import { GrPlayFill, GrPauseFill } from 'react-icons/gr'
 import { ImMinus, ImPlus, ImCross } from 'react-icons/im'
+import { FaPlay } from 'react-icons/fa'
 
 const VideoPlayer = ({ nameFilm }) => {
 	const [isPlay, setIsPlay] = useState(true)
@@ -24,88 +25,108 @@ const VideoPlayer = ({ nameFilm }) => {
 	return (
 		<div className={styles.wrap}>
 			{localStorage.getItem('start') ? (
-				<img src={`http://localhost:${localStorage.getItem('port')}/video`} />
+				<img
+					src={`http://localhost:${localStorage.getItem('port')}/video`}
+					width='1000'
+					height='1000'
+				/>
 			) : (
-				<img src={`/${nameFilm}.png`} width='500' height='500' />
+				<div className={styles.img}>
+					<img src={`/${nameFilm}.png`} width='1052.5' />
+					<div className={styles.playbtn}>
+						<Button
+							className={styles.btn}
+							onClick={play}
+							text={<FaPlay size='100px' color='white' />}
+						/>
+					</div>
+				</div>
 			)}
 			<div className={styles.btns}>
-				<Button className={styles.btn} onClick={play} text='start' />
-				<Button
-					className={styles.btn}
-					onClick={() =>
-						services.shift({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							vct: 'left',
-						})
-					}
-					text={<MdOutlineDoubleArrow style={{ rotate: '180deg' }} />}
-				/>
-				{isPlay ? (
+				<div className={styles.block}>
 					<Button
 						className={styles.btn}
-						onClick={() => {
-							services.pause({
+						onClick={() =>
+							services.shift({
 								login: JSON.parse(localStorage.getItem('login')).login,
+								vct: 'left',
 							})
-							setIsPlay(false)
-						}}
-						text={<GrPauseFill />}
+						}
+						text={<MdOutlineDoubleArrow style={{ rotate: '180deg' }} />}
 					/>
-				) : (
+					{isPlay ? (
+						<Button
+							className={styles.btn}
+							onClick={() => {
+								services.pause({
+									login: JSON.parse(localStorage.getItem('login')).login,
+								})
+								setIsPlay(false)
+							}}
+							text={<GrPauseFill />}
+						/>
+					) : (
+						<Button
+							className={styles.btn}
+							onClick={() => {
+								services.resume({
+									login: JSON.parse(localStorage.getItem('login')).login,
+								})
+								setIsPlay(true)
+							}}
+							text={<GrPlayFill />}
+						/>
+					)}
 					<Button
 						className={styles.btn}
-						onClick={() => {
-							services.resume({
+						onClick={() =>
+							services.shift({
 								login: JSON.parse(localStorage.getItem('login')).login,
+								vct: 'right',
 							})
-							setIsPlay(true)
-						}}
-						text={<GrPlayFill />}
+						}
+						text={<MdOutlineDoubleArrow />}
 					/>
-				)}
-				<Button
-					className={styles.btn}
-					onClick={() =>
-						services.shift({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							vct: 'right',
-						})
-					}
-					text={<MdOutlineDoubleArrow />}
-				/>
-				<Button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'epilepsy',
-							vct: 'left',
-						})
-					}
-					text='epilepsy'
-				/>
-				<Button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'monochromatic',
-							vct: 'left',
-						})
-					}
-					text='monochromatic'
-				/>
-				<Button
-					className={styles.btn}
-					onClick={() =>
-						services.filter({
-							login: JSON.parse(localStorage.getItem('login')).login,
-							filterType: 'blue',
-							vct: 'left',
-						})
-					}
-					text='bluefiltr'
-				/>
+				</div>
+				<div className={styles.block}>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'epilepsy',
+								vct: 'left',
+							})
+						}
+						text={<img src='/epilepsy.png' width='30px' height='30px' />}
+					/>
+				</div>
+				<div className={styles.block}>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'monochromatic',
+								vct: 'left',
+							})
+						}
+						text={<img src='/monochrom.png' width='30px' height='30px' />}
+					/>
+				</div>
+				<div className={styles.block}>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.filter({
+								login: JSON.parse(localStorage.getItem('login')).login,
+								filterType: 'blue',
+								vct: 'left',
+							})
+						}
+						text={<img src='/bluefilter.png' width='25px' height='25px' />}
+					/>
+				</div>
 				<div className={styles.block}>
 					<Button
 						className={styles.btn}
@@ -206,15 +227,17 @@ const VideoPlayer = ({ nameFilm }) => {
 						text={<ImPlus />}
 					/>
 				</div>
-				<Button
-					className={styles.btn}
-					onClick={() =>
-						services.remove({
-							login: JSON.parse(localStorage.getItem('login')).login,
-						})
-					}
-					text={<ImCross />}
-				/>
+				<div className={styles.block}>
+					<Button
+						className={styles.btn}
+						onClick={() =>
+							services.remove({
+								login: JSON.parse(localStorage.getItem('login')).login,
+							})
+						}
+						text={<ImCross />}
+					/>
+				</div>
 			</div>
 		</div>
 	)
