@@ -31,3 +31,19 @@ frontend:
 
 ## Описание девопса:
 Использовал сервис МТС Compute Cloud (Ubuntu). frontend на нем работает, API он не видит.
+
+## Запуск
+работает только на linux\
+frontend:\
+```
+cd frontend
+yarn
+yarn dev
+```
+backend:
+```
+cd server/build
+cmake ..
+make
+./api
+```
