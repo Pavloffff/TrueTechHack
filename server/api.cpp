@@ -149,7 +149,6 @@ int main(int argc, char const *argv[])
             return crow::response(200);
         }
     });
-    app.bindaddr("http://91.185.86.201:4999");
     app.port(MINPORT - 1).run();
     return 0;
 }

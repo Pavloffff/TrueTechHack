@@ -27,7 +27,7 @@ const VideoPlayer = ({ nameFilm }) => {
 		<div className={styles.wrap}>
 			{localStorage.getItem('start') ? (
 				<img
-					src={`http://91.185.86.201:${localStorage.getItem('port')}/video`}
+					src={`http://127.0.0.1:${localStorage.getItem('port')}/video`}
 					width='1000'
 					height='1000'
 				/>
